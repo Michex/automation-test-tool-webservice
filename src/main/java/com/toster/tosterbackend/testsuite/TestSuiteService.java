@@ -1,11 +1,18 @@
 package com.toster.tosterbackend.testsuite;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.toster.tosterbackend.config.Config;
 import com.toster.tosterbackend.db.AppRow;
 import com.toster.tosterbackend.db.AutoTestRepository;
 import com.toster.tosterbackend.db.TestCaseRow;
 import io.vavr.collection.List;
+import io.vavr.control.Try;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.function.Function;
 
 
@@ -42,7 +49,13 @@ public class TestSuiteService {
                 dbObj.getTestName());
     }
 
-    public void runTests() {
+    public TestStatus runTest(TestCase testCase) throws IOException {
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        mapper.writeValue(new File(Config.getConfig().getTestSuiteFilePath()), testCase);
+
+        return mapper.readValue(new File(Config.getConfig().getTestStatusFilePath()), TestStatus.class);
 
     }
 

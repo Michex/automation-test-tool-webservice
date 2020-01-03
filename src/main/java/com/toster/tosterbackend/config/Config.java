@@ -16,6 +16,9 @@ public class Config {
     @JsonProperty("testSuiteFilePath")
     String testSuiteFilePath;
 
+    @JsonProperty("testStatusFilePath")
+    String testStatusFilePath;
+
     private static final Config INSTANCE = new Config();
 
     public static Config getConfig() {
