@@ -2,9 +2,12 @@ package com.toster.tosterbackend.controllers;
 
 import com.toster.tosterbackend.testsuite.NewTestCase;
 import com.toster.tosterbackend.testsuite.TestCase;
+import com.toster.tosterbackend.testsuite.TestStatus;
 import com.toster.tosterbackend.testsuite.TestSuiteService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 
 @RestController
@@ -41,9 +44,10 @@ public class TestSuiteController {
             value = "/runTests",
             method = RequestMethod.GET
     )
+
     @ResponseBody
-    public void runTests() {
-        testService.runTests();
+    public TestStatus runTest(final TestCase testCase) throws IOException {
+        return testService.runTest(testCase);
     }
 }
 

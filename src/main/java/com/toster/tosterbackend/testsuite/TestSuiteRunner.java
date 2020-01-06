@@ -9,6 +9,9 @@ public class TestSuiteRunner {
 
     public void runTestSuite() {
 
+
+
+
         Try.run(() ->
         {
             Process proc = Runtime.getRuntime()
