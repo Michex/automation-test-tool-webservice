@@ -1,9 +1,10 @@
 package com.toster.tosterbackend.controllers;
 
-import com.toster.tosterbackend.testsuite.NewTestCase;
-import com.toster.tosterbackend.testsuite.TestCase;
-import com.toster.tosterbackend.testsuite.TestStatus;
-import com.toster.tosterbackend.testsuite.TestSuiteService;
+import com.toster.tosterbackend.testCase.TestCaseService;
+import com.toster.tosterbackend.testCase.model.NewTestCase;
+import com.toster.tosterbackend.testCase.model.TestCase;
+import com.toster.tosterbackend.testSuite.model.*;
+import com.toster.tosterbackend.testSuite.TestSuiteService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,39 +16,38 @@ import java.io.IOException;
 public class TestSuiteController {
 
 
-    private final TestSuiteService testService;
+    private final TestSuiteService testSuiteService;
 
     public TestSuiteController(TestSuiteService testService) {
-        this.testService = testService;
+        this.testSuiteService = testService;
     }
 
+
     @RequestMapping(
-            value = "/getTests",
+            value = "/addTestSuite",
             method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE
     )
     @ResponseBody
-    public java.util.List<TestCase> getTests() {
-        return testService.getTests();
+    public TestSuite addTestSuite(@RequestBody final NewTestSuite newTestSuite) {
+        return testSuiteService.addTestSuite(newTestSuite);
     }
 
-    @RequestMapping(
-            value = "/addTest",
-            method = RequestMethod.POST
-    )
-    @ResponseBody
-    public TestCase addTest(final NewTestCase testModels) {
-        return testService.addTest(testModels);
-    }
 
-    @RequestMapping(
-            value = "/runTests",
-            method = RequestMethod.GET
-    )
 
-    @ResponseBody
-    public TestStatus runTest(final TestCase testCase) throws IOException {
-        return testService.runTest(testCase);
-    }
+
+
+
+//    @RequestMapping(
+//            value = "/runTestSuite",
+//            method = RequestMethod.GET,
+//            produces = MediaType.APPLICATION_JSON_VALUE,
+//            consumes = MediaType.APPLICATION_JSON_VALUE
+//    )
+//    @ResponseBody
+//    public TestStatus runTestSuite() throws IOException {
+//        return testService.runTest(testSuite);
+//    }
 }
 

@@ -1,4 +1,4 @@
-package com.toster.tosterbackend.testsuite;
+package com.toster.tosterbackend.testSuite.model;
 
 import lombok.Data;
 

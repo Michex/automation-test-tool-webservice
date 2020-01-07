@@ -1,9 +1,10 @@
 package com.toster.tosterbackend;
 
-import com.toster.tosterbackend.db.AutoTestRepository;
-import com.toster.tosterbackend.testsuite.NewTestCase;
-import com.toster.tosterbackend.testsuite.TestCase;
-import com.toster.tosterbackend.testsuite.TestSuiteService;
+import com.toster.tosterbackend.db.TestCaseRepository;
+import com.toster.tosterbackend.testCase.TestCaseService;
+import com.toster.tosterbackend.testCase.model.NewTestCase;
+import com.toster.tosterbackend.testCase.model.TestCase;
+import com.toster.tosterbackend.testSuite.TestSuiteService;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
@@ -14,10 +15,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class TestSuiteServiceTest {
+public class TestCaseServiceTest {
 
     @Autowired
-    public AutoTestRepository repository;
+    public TestCaseRepository repository;
 
     @After
     public void cleanAfterTest() {
@@ -27,7 +28,7 @@ public class TestSuiteServiceTest {
     @Test
     public void getEmptyList() {
 
-        final TestSuiteService service = new TestSuiteService(repository);
+        final TestCaseService service = new TestCaseService(repository);
 
         final java.util.List<TestCase> testModels = service.getTests();
         Assert.assertTrue(testModels.isEmpty());
@@ -37,10 +38,10 @@ public class TestSuiteServiceTest {
     @Test
     public void addTestCaseToDb() {
 
-        final TestSuiteService service = new TestSuiteService(repository);
+        final TestCaseService service = new TestCaseService(repository);
 
-        TestCase testCase1 = service.addTest(new NewTestCase("Google", "Test"));
-        TestCase testCase2 = service.addTest(new NewTestCase("Google", "Test"));
+        TestCase testCase1 = service.addTest(new NewTestCase("Test"));
+        TestCase testCase2 = service.addTest(new NewTestCase("Test2"));
 
 
         final java.util.List<TestCase> testModels = service.getTests();
