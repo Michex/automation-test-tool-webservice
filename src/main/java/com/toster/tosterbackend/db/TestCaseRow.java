@@ -18,8 +18,9 @@ public class TestCaseRow {
     public TestCaseRow() {
     }
 
-    public TestCaseRow(String testName) {
+    public TestCaseRow(String testName, TestSuiteRow testSuiteRow) {
         this.testName = testName;
+        this.testSuiteRow = testSuiteRow;
     }
 
     public long getId() {

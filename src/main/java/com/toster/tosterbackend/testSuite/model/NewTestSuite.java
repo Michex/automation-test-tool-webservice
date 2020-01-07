@@ -10,18 +10,12 @@ import io.vavr.collection.List;
 public class NewTestSuite {
 
     public final String projectName;
-    public List<TestCase> testCases;
 
     @JsonCreator
     public NewTestSuite(@JsonProperty("projectName") String projectName) {
         this.projectName = projectName;
     }
 
-    @JsonCreator
-    public NewTestSuite(@JsonProperty("projectName") String projectName, List<TestCase> testCases) {
-        this.projectName = projectName;
-        this.testCases = testCases;
-    }
 
 
 }

@@ -18,19 +18,24 @@ import java.util.function.Function;
 @Service
 public class TestSuiteService {
 
-    private final TestSuiteRepository repository;
+    private final TestSuiteRepository testSuiteRepository;
 
     public TestSuiteService(TestSuiteRepository repository) {
-        this.repository = repository;
+        this.testSuiteRepository = repository;
     }
 
 
     public TestSuite addTestSuite(NewTestSuite newTestSuite) {
 
-        TestSuiteRow testSuiteRow =  this.repository.save(new TestSuiteRow(newTestSuite.projectName));
+        TestSuiteRow testSuiteRow =  this.testSuiteRepository.save(new TestSuiteRow(newTestSuite.projectName));
         
         return this.getMappedTestSuiteRowFunction().apply(testSuiteRow);
 
+    }
+
+    public java.util.List<TestSuite> getTestSuites() {
+        return List.ofAll(this.testSuiteRepository.findAll())
+                .map(getMappedTestSuiteRowFunction()).asJava();
     }
 
     public TestStatus runTest(NewTestSuite newTestSuite) throws IOException {
@@ -47,6 +52,17 @@ public class TestSuiteService {
         return dbObj -> new TestSuite(
                 dbObj.getId(),
                 dbObj.getProjectInfo(),
-                List.ofAll(dbObj.getTestCases()).map(dbTestCase -> new TestCase(dbTestCase.getId(), dbTestCase.getTestName())));
+                List.ofAll(dbObj.getTestCases()).map(
+                        testCaseRow ->
+                            new TestCase(
+                                    testCaseRow.getId(),
+                                    testCaseRow.getTestName(),
+                                    testCaseRow.getTestSuiteRow().getId()
+                            )
+
+                ).asJava());
+
     }
+
+
 }

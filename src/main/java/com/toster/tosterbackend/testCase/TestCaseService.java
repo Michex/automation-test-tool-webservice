@@ -2,6 +2,7 @@ package com.toster.tosterbackend.testCase;
 
 import com.toster.tosterbackend.db.TestCaseRepository;
 import com.toster.tosterbackend.db.TestCaseRow;
+import com.toster.tosterbackend.db.TestSuiteRepository;
 import com.toster.tosterbackend.testCase.model.NewTestCase;
 import com.toster.tosterbackend.testCase.model.TestCase;
 import io.vavr.collection.List;
@@ -12,17 +13,21 @@ import java.util.function.Function;
 @Service
 public class TestCaseService {
 
-    private final TestCaseRepository repository;
+    private final TestCaseRepository testCaseRepository;
+    private final TestSuiteRepository testSuiteRepository;
 
-    public TestCaseService(TestCaseRepository repository) {
-        this.repository = repository;
+
+    public TestCaseService(TestCaseRepository testCaseRepository, TestSuiteRepository testSuiteRepository) {
+        this.testCaseRepository = testCaseRepository;
+        this.testSuiteRepository = testSuiteRepository;
     }
 
-    public TestCase addTest(NewTestCase newTestModel) {
+    public TestCase addTest(NewTestCase newTestCase) {
 
-        TestCaseRow testCaseRow = this.repository.save(
+        TestCaseRow testCaseRow = this.testCaseRepository.save(
                 new TestCaseRow(
-                        newTestModel.testName
+                        newTestCase.testName,
+                        testSuiteRepository.findById(newTestCase.testSuiteId).get()
                 ));
 
         return this.getMappedTestCaseRowFunction().apply(testCaseRow);
@@ -30,7 +35,7 @@ public class TestCaseService {
     }
 
     public java.util.List<TestCase> getTests() {
-        return List.ofAll(this.repository.findAll())
+        return List.ofAll(this.testCaseRepository.findAll())
                 .map(getMappedTestCaseRowFunction()).asJava();
 
     }
@@ -38,6 +43,7 @@ public class TestCaseService {
     private Function<TestCaseRow, TestCase> getMappedTestCaseRowFunction() {
         return dbObj -> new TestCase(
                 dbObj.getId(),
-                dbObj.getTestName());
+                dbObj.getTestName(),
+                dbObj.getTestSuiteRow().getId());
     }
 }
