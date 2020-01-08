@@ -4,6 +4,7 @@ import com.toster.tosterbackend.testCase.TestCaseService;
 import com.toster.tosterbackend.testCase.model.NewTestCase;
 import com.toster.tosterbackend.testCase.model.TestCase;
 
+import com.toster.tosterbackend.testSuite.model.TestSuite;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +38,18 @@ public class TestCaseController {
     @ResponseBody
     public TestCase addTest(@RequestBody final NewTestCase testModels) {
         return testCaseService.addTest(testModels);
+    }
+
+    @RequestMapping(
+            value = "/testSuite/{idTestSuite}/testCase/{idTestCase}",
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @ResponseBody
+    public TestCase setTestCaseToTestSuite(@PathVariable("idTestSuite") long idTestSuite, @PathVariable("idTestCase") long idTestCase) {
+        return testCaseService.setTestCaseToTestSuite(idTestSuite, idTestCase).orElseThrow(
+                () -> new IllegalArgumentException("Test Case of id: " + idTestCase + " does not exist")
+        );
     }
 
 

@@ -9,6 +9,7 @@ public class NewTestCase {
 
     public final String testName;
 
+
     @JsonCreator
     public NewTestCase(@JsonProperty("testName") String testName) {
         this.testName = testName;

@@ -43,17 +43,14 @@ public class TestSuiteController {
     }
 
     @RequestMapping(
-            value = "/testSuite/{idTestSuite}/testCase/{idTestCase}",
-            method = RequestMethod.POST,
+            value = "/getTestSuite/{id}",
+            method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     @ResponseBody
-    public TestSuite setTestCaseToTestSuite(@PathVariable("idTestSuite") long idTestSuite, @PathVariable("idTestCase") long idTestCase) {
-        return testSuiteService.setTestCaseToTestSuite(idTestSuite, idTestCase).orElseThrow(
-                () -> new IllegalArgumentException("Test Suite of id: " + idTestSuite + " does not exist")
-        );
+    public TestSuite getTestSuite(@PathVariable("id") long id) {
+        return testSuiteService.getTestSuite(id);
     }
-
 
 
 

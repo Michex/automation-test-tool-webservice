@@ -10,6 +10,7 @@ import com.toster.tosterbackend.db.TestSuiteRow;
 import com.toster.tosterbackend.testCase.model.TestCase;
 import com.toster.tosterbackend.testSuite.model.*;
 import io.vavr.collection.List;
+import io.vavr.collection.Seq;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,6 +56,10 @@ public class TestSuiteService {
 
     }
 
+    public TestSuite getTestSuite(long id) {
+        return this.testSuiteRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Test Suite of id: " + id + " does not exist")).toTestSuite();
+    }
+
     @Transactional
     public Optional<TestSuite> setTestCaseToTestSuite(long idTestSuite, long idTestCase) {
 
@@ -64,7 +69,7 @@ public class TestSuiteService {
                     ts.setTestCases(List.ofAll(ts.getTestCases()).append(this.testCaseRepository.findById(idTestCase).orElseThrow(() -> new IllegalArgumentException("Test Case of id: " + idTestCase + " does not exist"))).asJava());
                     return ts.toTestSuite();
                 }
-            );
+        );
 
     }
 }

@@ -16,7 +16,7 @@ public class TestSuiteRow {
 
     private String projectInfo;
 
-    @OneToMany(mappedBy = "testSuiteRow", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "testSuiteRow")
     private List<TestCaseRow> testCases = new ArrayList<TestCaseRow>();
 
     public TestSuiteRow(String projectName) {

@@ -135,16 +135,13 @@ public class TestCaseServiceTest {
         long idTestCase2 = testCase2.id;
 
 
-        Optional<TestSuite> testSuiteOptional1 = testSuiteService.setTestCaseToTestSuite(idTestSuite, idTestCase1);
-        Optional<TestSuite> testSuiteOptional2 = testSuiteService.setTestCaseToTestSuite(idTestSuite, idTestCase2);
+         testSuiteService.setTestCaseToTestSuite(idTestSuite, idTestCase1);
+         testSuiteService.setTestCaseToTestSuite(idTestSuite, idTestCase2);
 
+         TestSuite testSuite = testSuiteService.getTestSuite(idTestSuite);
 
+         Assert.assertEquals(2, testSuite.testCases.size());
 
-        TestSuite testSuite = testSuiteOptional2.orElseThrow(() -> new IllegalArgumentException("Test Suite of id: " + idTestSuite + " does not exist"));
-
-
-
-        Assert.assertEquals(2, testSuite.testCases.size());
 
     }
 

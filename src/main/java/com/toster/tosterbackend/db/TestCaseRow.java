@@ -13,7 +13,8 @@ public class TestCaseRow {
 
     private String testName;
 
-    @ManyToOne()
+    @ManyToOne
+    @JoinColumn(columnDefinition="integer")
     private TestSuiteRow testSuiteRow;
 
 
@@ -27,7 +28,8 @@ public class TestCaseRow {
     public TestCase toTestCase() {
         return new TestCase(
                 this.getId(),
-                this.getTestName());
+                this.getTestName(),
+                this.getTestSuiteRow().toTestSuite());
     }
 
     public long getId() {
