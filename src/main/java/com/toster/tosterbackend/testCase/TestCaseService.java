@@ -24,26 +24,18 @@ public class TestCaseService {
 
     public TestCase addTest(NewTestCase newTestCase) {
 
-        TestCaseRow testCaseRow = this.testCaseRepository.save(
+        return this.testCaseRepository.save(
                 new TestCaseRow(
                         newTestCase.testName,
                         testSuiteRepository.findById(newTestCase.testSuiteId).get()
-                ));
-
-        return this.getMappedTestCaseRowFunction().apply(testCaseRow);
+                )).toTestCase();
 
     }
 
     public java.util.List<TestCase> getTests() {
         return List.ofAll(this.testCaseRepository.findAll())
-                .map(getMappedTestCaseRowFunction()).asJava();
-
+                .map(TestCaseRow::toTestCase).asJava();
     }
 
-    private Function<TestCaseRow, TestCase> getMappedTestCaseRowFunction() {
-        return dbObj -> new TestCase(
-                dbObj.getId(),
-                dbObj.getTestName(),
-                dbObj.getTestSuiteRow().getId());
-    }
+
 }

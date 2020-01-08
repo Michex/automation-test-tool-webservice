@@ -1,5 +1,7 @@
 package com.toster.tosterbackend.db;
 
+import com.toster.tosterbackend.testCase.model.TestCase;
+
 import javax.persistence.*;
 
 @Entity
@@ -21,6 +23,13 @@ public class TestCaseRow {
     public TestCaseRow(String testName, TestSuiteRow testSuiteRow) {
         this.testName = testName;
         this.testSuiteRow = testSuiteRow;
+    }
+
+    public TestCase toTestCase() {
+        return new TestCase(
+                this.getId(),
+                this.getTestName(),
+                this.getTestSuiteRow().getId());
     }
 
     public long getId() {
