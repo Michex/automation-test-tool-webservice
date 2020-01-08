@@ -1,14 +1,11 @@
 package com.toster.tosterbackend.controllers;
 
-import com.toster.tosterbackend.testCase.TestCaseService;
-import com.toster.tosterbackend.testCase.model.NewTestCase;
-import com.toster.tosterbackend.testCase.model.TestCase;
 import com.toster.tosterbackend.testSuite.model.*;
 import com.toster.tosterbackend.testSuite.TestSuiteService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
+import java.util.List;
 
 
 @RestController
@@ -25,7 +22,7 @@ public class TestSuiteController {
 
     @RequestMapping(
             value = "/addTestSuite",
-            method = RequestMethod.GET,
+            method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
@@ -33,6 +30,30 @@ public class TestSuiteController {
     public TestSuite addTestSuite(@RequestBody final NewTestSuite newTestSuite) {
         return testSuiteService.addTestSuite(newTestSuite);
     }
+
+
+    @RequestMapping(
+            value = "/getTestSuites",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @ResponseBody
+    public List<TestSuite> getTestSuites() {
+        return testSuiteService.getTestSuites().asJava();
+    }
+
+    @RequestMapping(
+            value = "/testSuite/{idTestSuite}/testCase/{idTestCase}",
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @ResponseBody
+    public TestSuite setTestCaseToTestSuite(@PathVariable("idTestSuite") long idTestSuite, @PathVariable("idTestCase") long idTestCase) {
+        return testSuiteService.setTestCaseToTestSuite(idTestSuite, idTestCase).orElseThrow(
+                () -> new IllegalArgumentException("Test Suite of id: " + idTestSuite + " does not exist")
+        );
+    }
+
 
 
 

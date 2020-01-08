@@ -3,10 +3,11 @@ package com.toster.tosterbackend.controllers;
 import com.toster.tosterbackend.testCase.TestCaseService;
 import com.toster.tosterbackend.testCase.model.NewTestCase;
 import com.toster.tosterbackend.testCase.model.TestCase;
-import com.toster.tosterbackend.testSuite.model.NewTestSuite;
-import com.toster.tosterbackend.testSuite.model.TestSuite;
+
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/testCase")
@@ -24,8 +25,8 @@ public class TestCaseController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     @ResponseBody
-    public java.util.List<TestCase> getAllTests() {
-        return testCaseService.getTests();
+    public List<TestCase> getAllTests() {
+        return testCaseService.getTests().asJava();
     }
 
     @RequestMapping(

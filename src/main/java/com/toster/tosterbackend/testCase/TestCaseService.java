@@ -3,12 +3,11 @@ package com.toster.tosterbackend.testCase;
 import com.toster.tosterbackend.db.TestCaseRepository;
 import com.toster.tosterbackend.db.TestCaseRow;
 import com.toster.tosterbackend.db.TestSuiteRepository;
+import com.toster.tosterbackend.db.TestSuiteRow;
 import com.toster.tosterbackend.testCase.model.NewTestCase;
 import com.toster.tosterbackend.testCase.model.TestCase;
 import io.vavr.collection.List;
 import org.springframework.stereotype.Service;
-
-import java.util.function.Function;
 
 @Service
 public class TestCaseService {
@@ -26,16 +25,15 @@ public class TestCaseService {
 
         return this.testCaseRepository.save(
                 new TestCaseRow(
-                        newTestCase.testName,
-                        testSuiteRepository.findById(newTestCase.testSuiteId).get()
-                )).toTestCase();
+                        newTestCase.testName)).toTestCase();
 
     }
 
-    public java.util.List<TestCase> getTests() {
+    public List<TestCase> getTests() {
         return List.ofAll(this.testCaseRepository.findAll())
-                .map(TestCaseRow::toTestCase).asJava();
+                .map(TestCaseRow::toTestCase);
     }
+
 
 
 }

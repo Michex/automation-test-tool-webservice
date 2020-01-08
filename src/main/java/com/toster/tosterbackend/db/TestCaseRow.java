@@ -13,23 +13,21 @@ public class TestCaseRow {
 
     private String testName;
 
-    @ManyToOne
+    @ManyToOne()
     private TestSuiteRow testSuiteRow;
 
 
     public TestCaseRow() {
     }
 
-    public TestCaseRow(String testName, TestSuiteRow testSuiteRow) {
+    public TestCaseRow(String testName) {
         this.testName = testName;
-        this.testSuiteRow = testSuiteRow;
     }
 
     public TestCase toTestCase() {
         return new TestCase(
                 this.getId(),
-                this.getTestName(),
-                this.getTestSuiteRow().getId());
+                this.getTestName());
     }
 
     public long getId() {
