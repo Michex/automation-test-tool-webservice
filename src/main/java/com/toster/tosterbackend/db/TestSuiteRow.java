@@ -1,11 +1,15 @@
 package com.toster.tosterbackend.db;
 
 
+import com.toster.tosterbackend.testCase.model.TestCase;
 import com.toster.tosterbackend.testSuite.model.TestSuite;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 public class TestSuiteRow {
@@ -16,8 +20,8 @@ public class TestSuiteRow {
 
     private String projectInfo;
 
-    @OneToMany(mappedBy = "testSuiteRow")
-    private Set<TestCaseRow> testCases;
+    @OneToMany(mappedBy = "testSuiteRow", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<TestCaseRow> testCases = new ArrayList<>();
 
     public TestSuiteRow(String projectName) {
         this.projectInfo = projectName;
@@ -29,8 +33,11 @@ public class TestSuiteRow {
     public TestSuite toTestSuite(){
         return new TestSuite(
                 this.getId(),
-                this.getProjectInfo()
-        );
+                this.getProjectInfo(),
+                Optional.of(this.testCases).map(trl ->
+                        io.vavr.collection.List.ofAll(trl).map(tr ->
+                            new TestCase(tr.getId(), tr.getTestName(), tr.getTestSuiteRow().id))
+                ).get().orElse(io.vavr.collection.List.empty()).asJava());
     }
 
     public long getId() {
@@ -49,11 +56,11 @@ public class TestSuiteRow {
         this.projectInfo = projectInfo;
     }
 
-    public Set<TestCaseRow> getTestCases() {
+    public List<TestCaseRow> getTestCases() {
         return testCases;
     }
 
-    public void setTestCases(Set<TestCaseRow> testCases) {
+    public void setTestCases(List<TestCaseRow> testCases) {
         this.testCases = testCases;
     }
 }

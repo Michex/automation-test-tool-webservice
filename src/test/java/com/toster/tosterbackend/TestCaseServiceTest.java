@@ -59,6 +59,10 @@ public class TestCaseServiceTest {
         Assert.assertNotEquals(testCase1.id, testCase2.id);
         Assert.assertEquals(2, testModels.size());
 
+        final TestSuite testSuite = testSuiteService.getTestSuite(1);
+
+        Assert.assertEquals(2, testSuite.testCases.size());
+
 
 
     }
