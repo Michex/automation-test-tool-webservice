@@ -7,12 +7,12 @@ public class TestCase extends NewTestCase {
 
     public final long id;
 
-    public final TestSuite testSuite;
+    public final long testSuiteId;
 
-    public TestCase(long id, String testName, TestSuite testSuite) {
+    public TestCase(long id, String testName, long testSuiteId) {
         super(testName);
         this.id = id;
-        this.testSuite = testSuite;
+        this.testSuiteId = testSuiteId;
     }
 
 

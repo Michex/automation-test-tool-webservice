@@ -4,8 +4,8 @@ package com.toster.tosterbackend.db;
 import com.toster.tosterbackend.testSuite.model.TestSuite;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Entity
 public class TestSuiteRow {
@@ -17,7 +17,7 @@ public class TestSuiteRow {
     private String projectInfo;
 
     @OneToMany(mappedBy = "testSuiteRow")
-    private List<TestCaseRow> testCases = new ArrayList<TestCaseRow>();
+    private Set<TestCaseRow> testCases;
 
     public TestSuiteRow(String projectName) {
         this.projectInfo = projectName;
@@ -29,8 +29,7 @@ public class TestSuiteRow {
     public TestSuite toTestSuite(){
         return new TestSuite(
                 this.getId(),
-                this.getProjectInfo(),
-                io.vavr.collection.List.ofAll(this.getTestCases()).map(TestCaseRow::toTestCase).asJava()
+                this.getProjectInfo()
         );
     }
 
@@ -50,11 +49,11 @@ public class TestSuiteRow {
         this.projectInfo = projectInfo;
     }
 
-    public List<TestCaseRow> getTestCases() {
+    public Set<TestCaseRow> getTestCases() {
         return testCases;
     }
 
-    public void setTestCases(List<TestCaseRow> testCases) {
+    public void setTestCases(Set<TestCaseRow> testCases) {
         this.testCases = testCases;
     }
 }

@@ -6,6 +6,7 @@ import com.toster.tosterbackend.db.TestSuiteRepository;
 import com.toster.tosterbackend.db.TestSuiteRow;
 import com.toster.tosterbackend.testCase.model.NewTestCase;
 import com.toster.tosterbackend.testCase.model.TestCase;
+import com.toster.tosterbackend.testSuite.model.NoTestSuiteException;
 import com.toster.tosterbackend.testSuite.model.TestSuite;
 import io.vavr.collection.List;
 import org.springframework.stereotype.Service;
@@ -25,12 +26,19 @@ public class TestCaseService {
         this.testSuiteRepository = testSuiteRepository;
     }
 
-    public TestCase addTest(NewTestCase newTestCase) {
 
-        return this.testCaseRepository.save(
-                new TestCaseRow(
-                        newTestCase.testName)).toTestCase();
+    @Transactional
+    public TestCase addTest(final long testSuiteId, final NewTestCase newTestCase) {
 
+        final Optional<TestSuiteRow> testSuiteRow = this.testSuiteRepository.findById(testSuiteId);
+        return testSuiteRow.map( ts -> {
+                    final TestCaseRow testCaseRow = new TestCaseRow(
+                            newTestCase.testName,
+                            ts);
+
+                  return this.testCaseRepository.save(testCaseRow).toTestCase();
+                }
+        ).orElseThrow(() -> new NoTestSuiteException(testSuiteId));
     }
 
     public List<TestCase> getTests() {
@@ -46,7 +54,7 @@ public class TestCaseService {
 
 
         return testCase.map( tc -> {
-            tc.setTestSuiteRow(testSuiteRow.orElseThrow(() -> new IllegalArgumentException("Test Suite of id: " + idTestSuite + " does not exist")));
+            tc.setTestSuiteRow(testSuiteRow.orElseThrow(() -> new NoTestSuiteException(idTestSuite)));
                     return tc.toTestCase();
                 }
         );

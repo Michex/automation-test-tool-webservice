@@ -14,22 +14,22 @@ public class TestCaseRow {
     private String testName;
 
     @ManyToOne
-    @JoinColumn(columnDefinition="integer")
     private TestSuiteRow testSuiteRow;
 
 
-    public TestCaseRow() {
+    protected TestCaseRow() {
     }
 
-    public TestCaseRow(String testName) {
+    public TestCaseRow(String testName, TestSuiteRow testSuiteRow) {
         this.testName = testName;
+        this.testSuiteRow = testSuiteRow;
     }
 
     public TestCase toTestCase() {
         return new TestCase(
                 this.getId(),
                 this.getTestName(),
-                this.getTestSuiteRow().toTestSuite());
+                this.getTestSuiteRow().toTestSuite().id);
     }
 
     public long getId() {

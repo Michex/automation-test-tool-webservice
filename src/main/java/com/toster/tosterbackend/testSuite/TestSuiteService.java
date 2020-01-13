@@ -57,19 +57,8 @@ public class TestSuiteService {
     }
 
     public TestSuite getTestSuite(long id) {
-        return this.testSuiteRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Test Suite of id: " + id + " does not exist")).toTestSuite();
+        return this.testSuiteRepository.findById(id).orElseThrow(() -> new NoTestSuiteException(id)).toTestSuite();
     }
 
-    @Transactional
-    public Optional<TestSuite> setTestCaseToTestSuite(long idTestSuite, long idTestCase) {
 
-        final Optional<TestSuiteRow> testSuite = this.testSuiteRepository.findById(idTestSuite);
-
-        return testSuite.map( ts -> {
-                    ts.setTestCases(List.ofAll(ts.getTestCases()).append(this.testCaseRepository.findById(idTestCase).orElseThrow(() -> new IllegalArgumentException("Test Case of id: " + idTestCase + " does not exist"))).asJava());
-                    return ts.toTestSuite();
-                }
-        );
-
-    }
 }
