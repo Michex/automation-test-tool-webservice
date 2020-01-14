@@ -35,8 +35,18 @@ public class TestCaseController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     @ResponseBody
-    public TestCase addTest(@RequestBody @PathVariable("idTestSuite") long idTestSuite, final NewTestCase testModels) {
+    public TestCase addTest(@RequestBody @PathVariable("idTestSuite") final long idTestSuite, final NewTestCase testModels) {
         return testCaseService.addTest(idTestSuite, testModels);
+    }
+
+    @RequestMapping(
+            value = "/getTest/{id}",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @ResponseBody
+    public TestCase addTest(@RequestBody @PathVariable("id") final long id) {
+        return testCaseService.getTest(id);
     }
 
 

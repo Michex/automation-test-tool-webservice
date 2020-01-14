@@ -4,10 +4,10 @@ import com.toster.tosterbackend.db.TestCaseRepository;
 import com.toster.tosterbackend.db.TestCaseRow;
 import com.toster.tosterbackend.db.TestSuiteRepository;
 import com.toster.tosterbackend.db.TestSuiteRow;
+import com.toster.tosterbackend.testCase.exceptions.NoTestCaseException;
 import com.toster.tosterbackend.testCase.model.NewTestCase;
 import com.toster.tosterbackend.testCase.model.TestCase;
-import com.toster.tosterbackend.testSuite.model.NoTestSuiteException;
-import com.toster.tosterbackend.testSuite.model.TestSuite;
+import com.toster.tosterbackend.testSuite.exceptions.NoTestSuiteException;
 import io.vavr.collection.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,21 +46,15 @@ public class TestCaseService {
                 .map(TestCaseRow::toTestCase);
     }
 
-    @Transactional
-    public Optional<TestCase> setTestCaseToTestSuite(long idTestSuite, long idTestCase) {
 
-        final Optional<TestCaseRow> testCase = this.testCaseRepository.findById(idTestCase);
-        final Optional<TestSuiteRow> testSuiteRow = this.testSuiteRepository.findById(idTestCase);
+    public TestCase getTest(long id) {
 
-
-        return testCase.map( tc -> {
-            tc.setTestSuiteRow(testSuiteRow.orElseThrow(() -> new NoTestSuiteException(idTestSuite)));
-                    return tc.toTestCase();
-                }
-        );
-
+        return this.testCaseRepository
+                .findById(id)
+                .map(tc ->
+                        new TestCase(
+                                tc.getId(),
+                                tc.getTestName(),
+                                tc.getTestSuiteRow().getId())).orElseThrow(() -> new NoTestCaseException(id));
     }
-
-
-
 }

@@ -53,19 +53,5 @@ public class TestSuiteController {
     }
 
 
-
-
-
-
-//    @RequestMapping(
-//            value = "/runTestSuite",
-//            method = RequestMethod.GET,
-//            produces = MediaType.APPLICATION_JSON_VALUE,
-//            consumes = MediaType.APPLICATION_JSON_VALUE
-//    )
-//    @ResponseBody
-//    public TestStatus runTestSuite() throws IOException {
-//        return testService.runTest(testSuite);
-//    }
 }
 
