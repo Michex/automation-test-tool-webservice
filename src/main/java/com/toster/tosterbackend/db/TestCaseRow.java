@@ -1,25 +1,35 @@
 package com.toster.tosterbackend.db;
 
+import com.toster.tosterbackend.testCase.model.TestCase;
+
 import javax.persistence.*;
 
 @Entity
 public class TestCaseRow {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-
-    private String appName;
 
     private String testName;
 
-    public TestCaseRow() {
+    @ManyToOne
+    private TestSuiteRow testSuiteRow;
 
+
+    protected TestCaseRow() {
     }
 
-    public TestCaseRow(String testName, String appName) {
+    public TestCaseRow(String testName, TestSuiteRow testSuiteRow) {
         this.testName = testName;
-        this.appName = appName;
+        this.testSuiteRow = testSuiteRow;
+    }
+
+    public TestCase toTestCase() {
+        return new TestCase(
+                this.getId(),
+                this.getTestName(),
+                this.getTestSuiteRow().toTestSuite().id);
     }
 
     public long getId() {
@@ -30,19 +40,19 @@ public class TestCaseRow {
         this.id = id;
     }
 
-    public String getAppName() {
-        return appName;
-    }
-
-    public void setAppName(String appName) {
-        this.appName = appName;
-    }
-
     public String getTestName() {
         return testName;
     }
 
     public void setTestName(String testName) {
         this.testName = testName;
+    }
+
+    public TestSuiteRow getTestSuiteRow() {
+        return testSuiteRow;
+    }
+
+    public void setTestSuiteRow(TestSuiteRow testSuiteRow) {
+        this.testSuiteRow = testSuiteRow;
     }
 }

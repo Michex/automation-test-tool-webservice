@@ -4,11 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.vavr.control.Try;
-import lombok.Getter;
 
 import java.io.File;
 
-@Getter
 public class Config {
 
     private final static String yamlSource = "src/main/resources/config.yaml";
@@ -32,4 +30,11 @@ public class Config {
 
     }
 
+    public String getTestSuiteFilePath() {
+        return testSuiteFilePath;
+    }
+
+    public String getTestStatusFilePath() {
+        return testStatusFilePath;
+    }
 }
