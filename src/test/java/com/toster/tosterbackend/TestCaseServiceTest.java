@@ -12,19 +12,25 @@ import io.vavr.collection.List;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Order;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
-import java.util.Optional;
-
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class TestCaseServiceTest {
+
+
+
+    @Autowired
+    public TestSuiteService testSuiteService;
+
+    @Autowired
+    public TestCaseService testCaseService;
 
     @Autowired
     public TestCaseRepository testCaseRepository;
@@ -32,44 +38,112 @@ public class TestCaseServiceTest {
     @Autowired
     public TestSuiteRepository testSuiteRepository;
 
-
+    @After
+    public void cleanAfterTest() {
+        this.testSuiteRepository.deleteAll();
+        this.testCaseRepository.deleteAll();
+    }
 
     @Test
     @Order(1)
-    public void addTestSuiteToDb() {
+    public void createTestSuite() {
 
-        final TestSuiteService testSuiteService = new TestSuiteService(testSuiteRepository, testCaseRepository);
+        final String testSuiteName1 = "Projekt1";
+        final TestSuite testSuite1 = testSuiteService.addTestSuite(new NewTestSuite(testSuiteName1));
+
+        Assert.assertEquals(testSuiteName1, testSuite1.projectName);
+
+        final String testSuiteName2 = "Projekt2";
+        final TestSuite testSuite2 = testSuiteService.addTestSuite(new NewTestSuite(testSuiteName2));
+
+        Assert.assertEquals(testSuiteName2, testSuite2.projectName);
 
 
-        final TestSuite testSuite1 = testSuiteService.addTestSuite(new NewTestSuite("Projekt1"));
-        final TestSuite testSuite2 = testSuiteService.addTestSuite(new NewTestSuite("Projekt2"));
+    }
+
+    @Test
+    @Order(2)
+    public void getTestSuites() {
+
+        testSuiteService.addTestSuite(new NewTestSuite("test1"));
+        testSuiteService.addTestSuite(new NewTestSuite("test2"));
 
         final List<TestSuite> testSuites = testSuiteService.getTestSuites();
-        Assert.assertNotEquals(testSuite1.id, testSuite2.id);
+
         Assert.assertEquals(2, testSuites.size());
 
-        final TestCaseService testCaseService = new TestCaseService(testCaseRepository, testSuiteRepository);
+    }
 
-        TestCase testCase1 = testCaseService.addTest(testSuite1.id, new NewTestCase("Test"));
-        TestCase testCase2 = testCaseService.addTest(testSuite1.id, new NewTestCase("Test2"));
+    @Test
+    @Order(3)
+    public void getTestSuite() {
 
+        final String name = "Test";
+        TestSuite newTestSuite =  testSuiteService.addTestSuite(new NewTestSuite(name));
+        final TestSuite testSuite = testSuiteService.getTestSuite(newTestSuite.id);
 
-        final List<TestCase> testModels = testCaseService.getTests();
+        Assert.assertEquals(name, testSuite.projectName);
 
-        Assert.assertNotEquals(testCase1.id, testCase2.id);
-        Assert.assertEquals(2, testModels.size());
+    }
 
-        final TestSuite testSuite = testSuiteService.getTestSuite(1);
+    @Test
+    @Order(4)
+    public void createTestCases() {
 
-        Assert.assertEquals(2, testSuite.testCases.size());
+        final String testSuiteName = "TestSuite";
+        TestSuite testSuite = testSuiteService.addTestSuite(new NewTestSuite(testSuiteName));
 
+        final String testCaseName1 = "Test1";
+        final TestCase testCase1 = testCaseService.addTest(testSuite.id ,new NewTestCase(testCaseName1));
+
+        Assert.assertEquals(testCaseName1, testCase1.testName);
+        Assert.assertEquals(testSuite.id, testCase1.testSuiteId);
 
 
     }
 
 
+    @Test
+    @Order(5)
+    public void getTestCases() {
+
+        TestSuite testSuite = testSuiteService.addTestSuite(new NewTestSuite("test"));
+
+        testCaseService.addTest(testSuite.id, new NewTestCase("test1"));
+        testCaseService.addTest(testSuite.id, new NewTestCase("test2"));
 
 
+        final List<TestCase> testCases = testCaseService.getTests();
+
+        Assert.assertEquals(2, testCases.size());
+
+    }
+
+    @Test
+    @Order(6)
+    public void getTestCase() {
+
+        TestSuite testSuite = testSuiteService.addTestSuite(new NewTestSuite("test"));
+
+        final String testName = "Test1";
+        TestCase testCase = testCaseService.addTest(testSuite.id, new NewTestCase(testName));
+
+
+        Assert.assertEquals(testName, testCaseService.getTest(testCase.id).testName);
+
+    }
+
+    @Test
+    @Order(7)
+    public void getTestSuiteWithTestCases() {
+        TestSuite testSuite = testSuiteService.addTestSuite(new NewTestSuite("test"));
+        testCaseService.addTest(testSuite.id, new NewTestCase("test1"));
+        testCaseService.addTest(testSuite.id, new NewTestCase("test2"));
+
+
+        Assert.assertEquals(2, testSuiteService.getTestSuite(testSuite.id).testCases.size());
+
+    }
 
 
 }
