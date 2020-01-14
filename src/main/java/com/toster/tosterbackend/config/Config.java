@@ -17,8 +17,6 @@ public class Config {
     @JsonProperty("testStatusFilePath")
     String testStatusFilePath;
 
-    private static final Config INSTANCE = new Config();
-
     public static Config getConfig() {
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         return Try.of(() -> {
