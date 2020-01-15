@@ -8,9 +8,8 @@ import com.toster.tosterbackend.testCase.model.TestCase;
 import com.toster.tosterbackend.testSuite.TestSuiteService;
 import com.toster.tosterbackend.testSuite.model.NewTestSuite;
 import com.toster.tosterbackend.testSuite.model.TestSuite;
-import io.vavr.collection.List;
+import io.vavr.collection.List;;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Order;
@@ -18,6 +17,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 
 @RunWith(SpringRunner.class)
@@ -51,12 +53,12 @@ public class TestCaseServiceTest {
         final String testSuiteName1 = "Projekt1";
         final TestSuite testSuite1 = testSuiteService.addTestSuite(new NewTestSuite(testSuiteName1));
 
-        Assert.assertEquals(testSuiteName1, testSuite1.projectName);
+        assertEquals(testSuiteName1, testSuite1.projectName);
 
         final String testSuiteName2 = "Projekt2";
         final TestSuite testSuite2 = testSuiteService.addTestSuite(new NewTestSuite(testSuiteName2));
 
-        Assert.assertEquals(testSuiteName2, testSuite2.projectName);
+        assertEquals(testSuiteName2, testSuite2.projectName);
 
 
     }
@@ -70,7 +72,7 @@ public class TestCaseServiceTest {
 
         final List<TestSuite> testSuites = testSuiteService.getTestSuites();
 
-        Assert.assertEquals(2, testSuites.size());
+        assertEquals(2, testSuites.size());
 
     }
 
@@ -82,7 +84,7 @@ public class TestCaseServiceTest {
         TestSuite newTestSuite =  testSuiteService.addTestSuite(new NewTestSuite(name));
         final TestSuite testSuite = testSuiteService.getTestSuite(newTestSuite.id);
 
-        Assert.assertEquals(name, testSuite.projectName);
+        assertEquals(name, testSuite.projectName);
 
     }
 
@@ -96,10 +98,9 @@ public class TestCaseServiceTest {
         final String testCaseName1 = "Test1";
         final TestCase testCase1 = testCaseService.addTest(testSuite.id ,new NewTestCase(testCaseName1));
 
-        Assert.assertEquals(testCaseName1, testCase1.testName);
-        Assert.assertEquals(testSuite.id, testCase1.testSuiteId);
-
-
+        assertAll(
+                () -> assertEquals(testCaseName1, testCase1.testName),
+                () -> assertEquals(testSuite.id, testCase1.testSuiteId));
     }
 
 
@@ -115,7 +116,7 @@ public class TestCaseServiceTest {
 
         final List<TestCase> testCases = testCaseService.getTests();
 
-        Assert.assertEquals(2, testCases.size());
+        assertEquals(2, testCases.size());
 
     }
 
@@ -129,7 +130,7 @@ public class TestCaseServiceTest {
         TestCase testCase = testCaseService.addTest(testSuite.id, new NewTestCase(testName));
 
 
-        Assert.assertEquals(testName, testCaseService.getTest(testCase.id).testName);
+        assertEquals(testName, testCaseService.getTest(testCase.id).testName);
 
     }
 
@@ -141,7 +142,7 @@ public class TestCaseServiceTest {
         testCaseService.addTest(testSuite.id, new NewTestCase("test2"));
 
 
-        Assert.assertEquals(2, testSuiteService.getTestSuite(testSuite.id).testCases.size());
+        assertEquals(2, testSuiteService.getTestSuite(testSuite.id).testCases.size());
 
     }
 
