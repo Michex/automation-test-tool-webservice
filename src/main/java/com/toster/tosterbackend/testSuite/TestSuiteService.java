@@ -19,12 +19,10 @@ import java.io.IOException;
 public class TestSuiteService {
 
     private final TestSuiteRepository testSuiteRepository;
-    private final TestCaseRepository testCaseRepository;
 
 
-    public TestSuiteService(TestSuiteRepository testSuiteRepository, TestCaseRepository testCaseRepository) {
+    public TestSuiteService(TestSuiteRepository testSuiteRepository) {
         this.testSuiteRepository = testSuiteRepository;
-        this.testCaseRepository = testCaseRepository;
     }
 
 
@@ -39,16 +37,6 @@ public class TestSuiteService {
                 .map(TestSuiteRow::toTestSuite);
     }
 
-
-
-    public TestStatus runTest(NewTestSuite newTestSuite) throws IOException {
-
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.writeValue(new File(Config.getConfig().getTestSuiteFilePath()), newTestSuite);
-
-        return mapper.readValue(new File(Config.getConfig().getTestStatusFilePath()), TestStatus.class);
-
-    }
 
     public TestSuite getTestSuite(long id) {
         return this.testSuiteRepository.findById(id).orElseThrow(() -> new NoTestSuiteException(id)).toTestSuite();
