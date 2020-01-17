@@ -1,18 +1,12 @@
 package com.toster.tosterbackend.testSuite;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.toster.tosterbackend.config.Config;
-import com.toster.tosterbackend.db.TestCaseRepository;
-import com.toster.tosterbackend.db.TestSuiteRepository;
-import com.toster.tosterbackend.db.TestSuiteRow;
+import com.toster.tosterbackend.db.testSuite.TestSuiteRepository;
+import com.toster.tosterbackend.db.testSuite.TestSuiteRow;
 
 import com.toster.tosterbackend.testSuite.exceptions.NoTestSuiteException;
 import com.toster.tosterbackend.testSuite.model.*;
 import io.vavr.collection.List;
 import org.springframework.stereotype.Service;
-
-import java.io.File;
-import java.io.IOException;
 
 
 @Service

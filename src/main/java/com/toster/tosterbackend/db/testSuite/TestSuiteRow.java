@@ -1,6 +1,7 @@
-package com.toster.tosterbackend.db;
+package com.toster.tosterbackend.db.testSuite;
 
 
+import com.toster.tosterbackend.db.testCase.TestCaseRow;
 import com.toster.tosterbackend.testCase.model.TestCase;
 import com.toster.tosterbackend.testSuite.model.TestSuite;
 
@@ -8,8 +9,6 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Entity
 public class TestSuiteRow {
