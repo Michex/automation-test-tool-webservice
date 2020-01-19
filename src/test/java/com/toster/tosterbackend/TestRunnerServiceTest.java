@@ -49,8 +49,8 @@ public class TestRunnerServiceTest {
 
         String localDate = Helper.getCurrentDate();
 
-        TestStatus testStatus1 = testStatusService.setTestStatusFromTestApp(new NewTestStatus(testCase.id, "status info", "stacktrace info", localDate));
-        TestStatus testStatus2 = testStatusService.setTestStatusFromTestApp(new NewTestStatus(testCase.id, "status info2", "stacktrace info2", localDate));
+        TestStatus testStatus1 = testStatusService.setTestStatusFromTestApp(new NewTestStatus(testCase.testName, "status info", "stacktrace info", localDate));
+        TestStatus testStatus2 = testStatusService.setTestStatusFromTestApp(new NewTestStatus(testCase.testName, "status info2", "stacktrace info2", localDate));
 
 
         List<TestStatus> testStatuses = testStatusRepository.findAllByRunDate(localDate);

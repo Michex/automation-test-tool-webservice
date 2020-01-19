@@ -12,4 +12,6 @@ public interface TestStatusRepositoryCustom {
 
     @Query("select ts from TestStatusRow ts where ts.runDate = ?1")
     List<TestStatus> findAllByRunDate(final String runDate);
+
+
 }

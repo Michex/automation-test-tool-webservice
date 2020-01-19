@@ -36,7 +36,7 @@ public class TestStatusRow {
     public TestStatus toTestStatus() {
         return new TestStatus(
                 this.getId(),
-                this.getTestCase().getId(),
+                this.getTestCase().getTestName(),
                 this.getTestStatus(),
                 this.getStackTrace(),
                 this.getRunDate());

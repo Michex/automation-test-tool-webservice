@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class NewTestStatus {
 
-    public final long testCaseId;
+    public final String testCaseName;
     public final String status;
     public final String stackTrace;
     public final String runDate;
@@ -14,12 +14,12 @@ public class NewTestStatus {
 
 
     @JsonCreator
-    public NewTestStatus(@JsonProperty("testCaseId")long testCaseId,
+    public NewTestStatus(@JsonProperty("testCaseName")String testCaseName,
                          @JsonProperty("status")String status,
                          @JsonProperty("stackTrace") String stackTrace,
                          @JsonProperty("runDate") String runDate) {
 
-        this.testCaseId = testCaseId;
+        this.testCaseName = testCaseName;
         this.status = status;
         this.stackTrace = stackTrace;
         this.runDate = runDate;

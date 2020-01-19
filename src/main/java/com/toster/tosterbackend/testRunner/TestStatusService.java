@@ -3,7 +3,6 @@ package com.toster.tosterbackend.testRunner;
 import com.toster.tosterbackend.db.testCase.TestCaseRepository;
 import com.toster.tosterbackend.db.testCase.TestCaseRow;
 import com.toster.tosterbackend.db.testStatus.TestStatusRepository;
-import com.toster.tosterbackend.db.testStatus.TestStatusRepositoryCustom;
 import com.toster.tosterbackend.db.testStatus.TestStatusRow;
 import com.toster.tosterbackend.db.testSuite.TestSuiteRepository;
 import com.toster.tosterbackend.testCase.exceptions.NoTestCaseException;
@@ -39,17 +38,26 @@ public class TestStatusService {
 
         TestSuite testSuite = this.testSuiteRepository.findById(id).orElseThrow(() -> new NoTestSuiteException(id)).toTestSuite();
 
+        final StringBuilder testNames = new StringBuilder();
+
+        for (Object o : testSuite.testCases) {
+            testNames.append(o.toString());
+            testNames.append("\t");
+        }
+
+
         String currentDate = Helper.getCurrentDate();
 
         Try.run( () -> {
 
             final ProcessBuilder pBuilder = new ProcessBuilder(
                     "/home/msasin/www/tosterApp/automation-test-tool/build/distributions/automation-test-tool-0.1/bin/automation-test-tool",
-                    "/home/msasin/www/tosterApp/test-suite.json",
+                    testNames.toString(),
                     currentDate);
 
             final Process process = pBuilder.start();
             process.waitFor();
+            process.getErrorStream();
 
 
         }).onFailure(Throwable::printStackTrace);
@@ -61,8 +69,8 @@ public class TestStatusService {
 
     public TestStatus setTestStatusFromTestApp(NewTestStatus newTestStatus) {
 
-        final long testCaseId = newTestStatus.testCaseId;
-        TestCaseRow testCase = this.testCaseRepository.findById(testCaseId).orElseThrow(() -> new NoTestCaseException(testCaseId));
+        final String testCaseName = newTestStatus.testCaseName;
+        TestCaseRow testCase = this.testCaseRepository.findByTestName(testCaseName);
 
         return this.testStatusRepository.save(new TestStatusRow(testCase, newTestStatus.status, newTestStatus.stackTrace, newTestStatus.runDate)).toTestStatus();
 

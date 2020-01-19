@@ -4,8 +4,8 @@ public class TestStatus extends NewTestStatus{
 
     private final long id;
 
-    public TestStatus(long id, long testCaseId, String status, String stackTrace, String runDate) {
-        super(testCaseId, status, stackTrace, runDate);
+    public TestStatus(long id, String testCaseName, String status, String stackTrace, String runDate) {
+        super(testCaseName, status, stackTrace, runDate);
         this.id = id;
 
     }
