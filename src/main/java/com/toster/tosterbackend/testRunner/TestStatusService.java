@@ -6,6 +6,8 @@ import com.toster.tosterbackend.db.testStatus.TestStatusRepository;
 import com.toster.tosterbackend.db.testStatus.TestStatusRow;
 import com.toster.tosterbackend.db.testSuite.TestSuiteRepository;
 import com.toster.tosterbackend.testCase.exceptions.NoTestCaseException;
+import com.toster.tosterbackend.testCase.model.TestCase;
+import com.toster.tosterbackend.testRunner.exceptions.NoTestStatusException;
 import com.toster.tosterbackend.testRunner.model.NewTestStatus;
 import com.toster.tosterbackend.testRunner.model.TestStatus;
 import com.toster.tosterbackend.testSuite.exceptions.NoTestSuiteException;
@@ -15,7 +17,10 @@ import io.vavr.control.Try;
 import org.springframework.stereotype.Service;
 
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -40,29 +45,41 @@ public class TestStatusService {
 
         final StringBuilder testNames = new StringBuilder();
 
-        for (Object o : testSuite.testCases) {
-            testNames.append(o.toString());
-            testNames.append("\t");
+        for (TestCase tc : testSuite.testCases) {
+            testNames.append(tc.testName);
+            testNames.append(" ");
         }
 
 
         String currentDate = Helper.getCurrentDate();
 
-        Try.run( () -> {
+        return Try.of( () -> {
 
-            final ProcessBuilder pBuilder = new ProcessBuilder(
-                    "/home/msasin/www/tosterApp/automation-test-tool/build/distributions/automation-test-tool-0.1/bin/automation-test-tool",
-                    testNames.toString(),
-                    currentDate);
+            final ProcessBuilder pBuilder = new ProcessBuilder();
+
+            pBuilder.command("/home/msasin/www/tosterApp/automation-test-tool/build/distributions/automation-test-tool-0.1/bin/automation-test-tool", currentDate,  testNames.toString());
 
             final Process process = pBuilder.start();
-            process.waitFor();
-            process.getErrorStream();
+
+            BufferedReader reader =
+                    new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+
+            int exitCode = process.waitFor();
+            System.out.println("\nExited with error code : " + exitCode);
 
 
-        }).onFailure(Throwable::printStackTrace);
 
-        return testStatusRepository.findAllByRunDate(currentDate);
+
+            return testStatusRepository.findAllByRunDate(currentDate);
+
+        }).onFailure(Throwable::printStackTrace).getOrElseThrow(() -> new NoTestStatusException(currentDate));
+
+
 
     }
 
@@ -70,9 +87,9 @@ public class TestStatusService {
     public TestStatus setTestStatusFromTestApp(NewTestStatus newTestStatus) {
 
         final String testCaseName = newTestStatus.testCaseName;
-        TestCaseRow testCase = this.testCaseRepository.findByTestName(testCaseName);
+        Optional<TestCaseRow> testCase = this.testCaseRepository.findByTestName(testCaseName);
 
-        return this.testStatusRepository.save(new TestStatusRow(testCase, newTestStatus.status, newTestStatus.stackTrace, newTestStatus.runDate)).toTestStatus();
+        return this.testStatusRepository.save(new TestStatusRow(testCase.orElseThrow(() -> new NoTestCaseException(testCaseName)), newTestStatus.status, newTestStatus.stackTrace, newTestStatus.runDate)).toTestStatus();
 
     }
 }
