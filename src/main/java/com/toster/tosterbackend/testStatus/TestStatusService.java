@@ -38,11 +38,16 @@ public class TestStatusService {
 
     }
 
-    public java.util.List<TestStatus> getTestStatuses(long id) {
+    public java.util.List<TestStatus> getTestStatusesByTestCase(long id) {
 
         return List.ofAll(this.testStatusRepository.findAllByTestCase(id)).map(TestStatusRow::toTestStatus).asJava();
 
     }
 
 
+    public java.util.List<TestStatus> getTestStatusesByDate(String date) {
+
+        return List.ofAll(this.testStatusRepository.findAllByDate(date)).map(TestStatusRow::toTestStatus).asJava();
+
+    }
 }

@@ -14,4 +14,7 @@ public interface TestStatusRepositoryCustom {
     @Query("select ts from TestStatusRow ts where ts.testCase.id = ?1")
     List<TestStatusRow> findAllByTestCase(final long id);
 
+    @Query("select ts from TestStatusRow ts where ts.runDate like ?1%")
+    List<TestStatusRow> findAllByDate(final String date);
+
 }

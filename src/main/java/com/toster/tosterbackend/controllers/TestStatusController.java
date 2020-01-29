@@ -1,6 +1,5 @@
 package com.toster.tosterbackend.controllers;
 
-import com.toster.tosterbackend.testRunner.TestRunnerService;
 import com.toster.tosterbackend.testStatus.TestStatusService;
 import com.toster.tosterbackend.testStatus.model.NewTestStatus;
 import com.toster.tosterbackend.testStatus.model.TestStatus;
@@ -36,8 +35,18 @@ public class TestStatusController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     @ResponseBody
-    public List<TestStatus> getTestStatuses(@PathVariable("id") long id) {
-        return testStatusService.getTestStatuses(id);
+    public List<TestStatus> getTestStatusesByTestCase(@PathVariable("id") long id) {
+        return testStatusService.getTestStatusesByTestCase(id);
+    }
+
+    @RequestMapping(
+            value = "/getTestStatusesByDate/{date}",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @ResponseBody
+    public List<TestStatus> getTestStatusesByDate(@PathVariable("date") String date) {
+        return testStatusService.getTestStatusesByDate(date);
     }
 
 
