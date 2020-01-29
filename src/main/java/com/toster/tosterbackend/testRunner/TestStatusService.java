@@ -43,21 +43,16 @@ public class TestStatusService {
 
         TestSuite testSuite = this.testSuiteRepository.findById(id).orElseThrow(() -> new NoTestSuiteException(id)).toTestSuite();
 
-        final StringBuilder testNames = new StringBuilder();
-
-        for (TestCase tc : testSuite.testCases) {
-            testNames.append(tc.testName);
-            testNames.append(" ");
-        }
-
-
         String currentDate = Helper.getCurrentDate();
 
         return Try.of( () -> {
 
             final ProcessBuilder pBuilder = new ProcessBuilder();
+            pBuilder.command("/home/msasin/www/tosterApp/automation-test-tool/build/distributions/automation-test-tool-0.1/bin/automation-test-tool", currentDate);
 
-            pBuilder.command("/home/msasin/www/tosterApp/automation-test-tool/build/distributions/automation-test-tool-0.1/bin/automation-test-tool", currentDate,  testNames.toString());
+            testSuite.testCases.forEach(tc -> pBuilder.command().add(tc.testName.replaceAll(" ","")));
+
+
 
             final Process process = pBuilder.start();
 
@@ -71,8 +66,6 @@ public class TestStatusService {
 
             int exitCode = process.waitFor();
             System.out.println("\nExited with error code : " + exitCode);
-
-
 
 
             return testStatusRepository.findAllByRunDate(currentDate);
