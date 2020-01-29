@@ -1,7 +1,7 @@
 package com.toster.tosterbackend;
 
-import com.toster.tosterbackend.db.TestCaseRepository;
-import com.toster.tosterbackend.db.TestSuiteRepository;
+import com.toster.tosterbackend.db.testCase.TestCaseRepository;
+import com.toster.tosterbackend.db.testSuite.TestSuiteRepository;
 import com.toster.tosterbackend.testCase.TestCaseService;
 import com.toster.tosterbackend.testCase.model.NewTestCase;
 import com.toster.tosterbackend.testCase.model.TestCase;
@@ -11,7 +11,6 @@ import com.toster.tosterbackend.testSuite.model.TestSuite;
 import io.vavr.collection.List;;
 import org.junit.After;
 import org.junit.Test;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Order;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +24,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class TestCaseServiceTest {
-
-
 
     @Autowired
     public TestSuiteService testSuiteService;

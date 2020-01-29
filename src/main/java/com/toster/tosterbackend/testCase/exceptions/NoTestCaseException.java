@@ -9,4 +9,8 @@ public class NoTestCaseException extends RuntimeException {
     public NoTestCaseException(long id) {
         super("Test Suite of id: " + id + " does not exist");
     }
+
+    public NoTestCaseException(String name) {
+        super("Test Suite of name: " + name + " does not exist");
+    }
 }

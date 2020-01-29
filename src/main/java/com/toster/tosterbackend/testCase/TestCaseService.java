@@ -1,9 +1,9 @@
 package com.toster.tosterbackend.testCase;
 
-import com.toster.tosterbackend.db.TestCaseRepository;
-import com.toster.tosterbackend.db.TestCaseRow;
-import com.toster.tosterbackend.db.TestSuiteRepository;
-import com.toster.tosterbackend.db.TestSuiteRow;
+import com.toster.tosterbackend.db.testCase.TestCaseRepository;
+import com.toster.tosterbackend.db.testCase.TestCaseRow;
+import com.toster.tosterbackend.db.testSuite.TestSuiteRepository;
+import com.toster.tosterbackend.db.testSuite.TestSuiteRow;
 import com.toster.tosterbackend.testCase.exceptions.NoTestCaseException;
 import com.toster.tosterbackend.testCase.model.NewTestCase;
 import com.toster.tosterbackend.testCase.model.TestCase;
