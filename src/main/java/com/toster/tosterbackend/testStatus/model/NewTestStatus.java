@@ -1,4 +1,4 @@
-package com.toster.tosterbackend.testRunner.model;
+package com.toster.tosterbackend.testStatus.model;
 
 
 import com.fasterxml.jackson.annotation.JsonCreator;

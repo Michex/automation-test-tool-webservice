@@ -1,8 +1,8 @@
 package com.toster.tosterbackend.controllers;
 
-import com.toster.tosterbackend.testRunner.TestStatusService;
-import com.toster.tosterbackend.testRunner.model.NewTestStatus;
-import com.toster.tosterbackend.testRunner.model.TestStatus;
+import com.toster.tosterbackend.testRunner.TestRunnerService;
+import com.toster.tosterbackend.testStatus.model.NewTestStatus;
+import com.toster.tosterbackend.testStatus.model.TestStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,10 +12,10 @@ import java.util.List;
 @RequestMapping("/testRunner")
 public class TestRunnerController {
 
-    private final TestStatusService testStatusService;
+    private final TestRunnerService testRunnerService;
 
-    public TestRunnerController(TestStatusService testStatusService) {
-        this.testStatusService = testStatusService;
+    public TestRunnerController(TestRunnerService testRunnerService) {
+        this.testRunnerService = testRunnerService;
     }
 
     @RequestMapping(
@@ -25,23 +25,8 @@ public class TestRunnerController {
     )
     @ResponseBody
     public List<TestStatus> runTestSuite(@PathVariable("id") long id) {
-        return testStatusService.runTestSuite(id);
+        return testRunnerService.runTestSuite(id);
     }
-
-    @RequestMapping(
-            value = "/setTestStatus",
-            method = RequestMethod.POST,
-            produces = MediaType.APPLICATION_JSON_VALUE
-
-    )
-    @ResponseBody
-    public TestStatus setTestStatus(NewTestStatus newTestStatus) {
-        return testStatusService.setTestStatusFromTestApp(newTestStatus);
-    }
-
-
-
-
 
 
 

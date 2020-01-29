@@ -1,4 +1,4 @@
-package com.toster.tosterbackend.testRunner.exceptions;
+package com.toster.tosterbackend.testStatus.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

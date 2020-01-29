@@ -6,9 +6,9 @@ import com.toster.tosterbackend.db.testStatus.TestStatusRepository;
 import com.toster.tosterbackend.db.testStatus.TestStatusRow;
 import com.toster.tosterbackend.db.testSuite.TestSuiteRepository;
 import com.toster.tosterbackend.testCase.exceptions.NoTestCaseException;
-import com.toster.tosterbackend.testRunner.exceptions.NoTestStatusException;
-import com.toster.tosterbackend.testRunner.model.NewTestStatus;
-import com.toster.tosterbackend.testRunner.model.TestStatus;
+import com.toster.tosterbackend.testStatus.exceptions.NoTestStatusException;
+import com.toster.tosterbackend.testStatus.model.NewTestStatus;
+import com.toster.tosterbackend.testStatus.model.TestStatus;
 import com.toster.tosterbackend.testSuite.exceptions.NoTestSuiteException;
 import com.toster.tosterbackend.testSuite.model.TestSuite;
 import com.toster.tosterbackend.tools.Helper;
@@ -24,18 +24,16 @@ import java.util.Optional;
 
 
 @Service
-public class TestStatusService {
+public class TestRunnerService {
 
     private final TestSuiteRepository testSuiteRepository;
     private final TestStatusRepository testStatusRepository;
-    private final TestCaseRepository testCaseRepository;
 
 
 
-    public TestStatusService(TestSuiteRepository testSuiteRepository, TestStatusRepository testStatusRepository, TestCaseRepository testCaseRepository) {
+    public TestRunnerService(TestSuiteRepository testSuiteRepository, TestStatusRepository testStatusRepository) {
         this.testSuiteRepository = testSuiteRepository;
         this.testStatusRepository = testStatusRepository;
-        this.testCaseRepository = testCaseRepository;
     }
 
     @Transactional
@@ -63,7 +61,8 @@ public class TestStatusService {
                 System.out.println(line);
             }
 
-            List<TestStatus> listOfTestStatuses = testStatusRepository.findAllByRunDate(currentDate);
+            List<TestStatus> listOfTestStatuses = io.vavr.collection.List.ofAll(testStatusRepository.findAllByRunDate(currentDate)).map(TestStatusRow::toTestStatus).asJava();
+
             if (listOfTestStatuses.isEmpty()) {
                 throw new NoTestStatusException(currentDate);
             }
@@ -76,13 +75,4 @@ public class TestStatusService {
 
     }
 
-    @Transactional
-    public TestStatus setTestStatusFromTestApp(NewTestStatus newTestStatus) {
-
-        final String testCaseName = newTestStatus.testCaseName;
-        Optional<TestCaseRow> testCase = this.testCaseRepository.findByTestName(testCaseName);
-
-        return this.testStatusRepository.save(new TestStatusRow(testCase.orElseThrow(() -> new NoTestCaseException(testCaseName)), newTestStatus.status, newTestStatus.stackTrace, newTestStatus.runDate)).toTestStatus();
-
-    }
 }

@@ -1,7 +1,7 @@
 package com.toster.tosterbackend.db.testStatus;
 
 import com.toster.tosterbackend.db.testCase.TestCaseRow;
-import com.toster.tosterbackend.testRunner.model.TestStatus;
+import com.toster.tosterbackend.testStatus.model.TestStatus;
 
 import javax.persistence.*;
 

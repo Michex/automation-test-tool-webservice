@@ -2,11 +2,14 @@ package com.toster.tosterbackend.testCase;
 
 import com.toster.tosterbackend.db.testCase.TestCaseRepository;
 import com.toster.tosterbackend.db.testCase.TestCaseRow;
+import com.toster.tosterbackend.db.testStatus.TestStatusRepository;
+import com.toster.tosterbackend.db.testStatus.TestStatusRow;
 import com.toster.tosterbackend.db.testSuite.TestSuiteRepository;
 import com.toster.tosterbackend.db.testSuite.TestSuiteRow;
 import com.toster.tosterbackend.testCase.exceptions.NoTestCaseException;
 import com.toster.tosterbackend.testCase.model.NewTestCase;
 import com.toster.tosterbackend.testCase.model.TestCase;
+import com.toster.tosterbackend.testStatus.model.TestStatus;
 import com.toster.tosterbackend.testSuite.exceptions.NoTestSuiteException;
 import io.vavr.collection.List;
 import org.springframework.stereotype.Service;
@@ -57,4 +60,6 @@ public class TestCaseService {
                                 tc.getTestName(),
                                 tc.getTestSuiteRow().getId())).orElseThrow(() -> new NoTestCaseException(id));
     }
+
+
 }

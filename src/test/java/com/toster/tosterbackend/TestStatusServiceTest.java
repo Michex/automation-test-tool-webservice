@@ -2,13 +2,15 @@ package com.toster.tosterbackend;
 
 import com.toster.tosterbackend.db.testCase.TestCaseRepository;
 import com.toster.tosterbackend.db.testStatus.TestStatusRepository;
+import com.toster.tosterbackend.db.testStatus.TestStatusRow;
 import com.toster.tosterbackend.db.testSuite.TestSuiteRepository;
 import com.toster.tosterbackend.testCase.TestCaseService;
 import com.toster.tosterbackend.testCase.model.NewTestCase;
 import com.toster.tosterbackend.testCase.model.TestCase;
-import com.toster.tosterbackend.testRunner.TestStatusService;
-import com.toster.tosterbackend.testRunner.model.NewTestStatus;
-import com.toster.tosterbackend.testRunner.model.TestStatus;
+import com.toster.tosterbackend.testRunner.TestRunnerService;
+import com.toster.tosterbackend.testStatus.TestStatusService;
+import com.toster.tosterbackend.testStatus.model.NewTestStatus;
+import com.toster.tosterbackend.testStatus.model.TestStatus;
 import com.toster.tosterbackend.testSuite.TestSuiteService;
 import com.toster.tosterbackend.testSuite.model.NewTestSuite;
 import com.toster.tosterbackend.testSuite.model.TestSuite;
@@ -25,7 +27,7 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class TestRunnerServiceTest {
+public class TestStatusServiceTest {
 
     @Autowired
     public TestStatusRepository testStatusRepository;
@@ -40,9 +42,9 @@ public class TestRunnerServiceTest {
     @Test
     public void setTestStatus() {
 
-        TestStatusService testStatusService = new TestStatusService(testSuiteRepository, testStatusRepository, testCaseRepository);
         TestCaseService testCaseService = new TestCaseService(testCaseRepository, testSuiteRepository);
         TestSuiteService testSuiteService = new TestSuiteService(testSuiteRepository);
+        TestStatusService testStatusService = new TestStatusService(testStatusRepository, testCaseRepository);
 
         TestSuite testSuite = testSuiteService.addTestSuite(new NewTestSuite("Test suite"));
         TestCase testCase = testCaseService.addTest(testSuite.id, new NewTestCase("test"));
@@ -53,7 +55,7 @@ public class TestRunnerServiceTest {
         TestStatus testStatus2 = testStatusService.setTestStatusFromTestApp(new NewTestStatus(testCase.testName, "status info2", "stacktrace info2", localDate));
 
 
-        List<TestStatus> testStatuses = testStatusRepository.findAllByRunDate(localDate);
+        List<TestStatus> testStatuses = io.vavr.collection.List.ofAll(testStatusRepository.findAllByRunDate(localDate)).map(TestStatusRow::toTestStatus).asJava();
 
         assertEquals(localDate, testStatus2.runDate);
 

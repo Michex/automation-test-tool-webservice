@@ -1,4 +1,4 @@
-package com.toster.tosterbackend.testRunner.model;
+package com.toster.tosterbackend.testStatus.model;
 
 public class TestStatus extends NewTestStatus{
 
