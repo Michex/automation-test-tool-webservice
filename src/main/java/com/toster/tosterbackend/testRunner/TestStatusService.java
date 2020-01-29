@@ -14,6 +14,7 @@ import com.toster.tosterbackend.testSuite.model.TestSuite;
 import com.toster.tosterbackend.tools.Helper;
 import io.vavr.control.Try;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.io.BufferedReader;
@@ -37,7 +38,7 @@ public class TestStatusService {
         this.testCaseRepository = testCaseRepository;
     }
 
-
+    @Transactional
     public List<TestStatus> runTestSuite(long id) {
 
 
@@ -75,7 +76,7 @@ public class TestStatusService {
 
     }
 
-
+    @Transactional
     public TestStatus setTestStatusFromTestApp(NewTestStatus newTestStatus) {
 
         final String testCaseName = newTestStatus.testCaseName;
