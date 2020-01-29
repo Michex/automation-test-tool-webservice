@@ -6,7 +6,6 @@ import com.toster.tosterbackend.db.testStatus.TestStatusRepository;
 import com.toster.tosterbackend.db.testStatus.TestStatusRow;
 import com.toster.tosterbackend.db.testSuite.TestSuiteRepository;
 import com.toster.tosterbackend.testCase.exceptions.NoTestCaseException;
-import com.toster.tosterbackend.testCase.model.TestCase;
 import com.toster.tosterbackend.testRunner.exceptions.NoTestStatusException;
 import com.toster.tosterbackend.testRunner.model.NewTestStatus;
 import com.toster.tosterbackend.testRunner.model.TestStatus;
@@ -41,6 +40,7 @@ public class TestStatusService {
 
     public List<TestStatus> runTestSuite(long id) {
 
+
         TestSuite testSuite = this.testSuiteRepository.findById(id).orElseThrow(() -> new NoTestSuiteException(id)).toTestSuite();
 
         String currentDate = Helper.getCurrentDate();
@@ -52,8 +52,6 @@ public class TestStatusService {
 
             testSuite.testCases.forEach(tc -> pBuilder.command().add(tc.testName.replaceAll(" ","")));
 
-
-
             final Process process = pBuilder.start();
 
             BufferedReader reader =
@@ -64,13 +62,14 @@ public class TestStatusService {
                 System.out.println(line);
             }
 
-            int exitCode = process.waitFor();
-            System.out.println("\nExited with error code : " + exitCode);
+            List<TestStatus> listOfTestStatuses = testStatusRepository.findAllByRunDate(currentDate);
+            if (listOfTestStatuses.isEmpty()) {
+                throw new NoTestStatusException(currentDate);
+            }
 
+            return listOfTestStatuses;
 
-            return testStatusRepository.findAllByRunDate(currentDate);
-
-        }).onFailure(Throwable::printStackTrace).getOrElseThrow(() -> new NoTestStatusException(currentDate));
+        }).onFailure(Throwable::printStackTrace).get();
 
 
 
