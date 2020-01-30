@@ -61,6 +61,10 @@ public class TestStatusServiceTest {
 
         testStatuses.forEach(ts -> assertEquals(localDate, ts.runDate));
 
+        List<TestStatus> testStatusesByTestCase = io.vavr.collection.List.ofAll(testStatusRepository.findAllByTestCase(testCase.id)).map(TestStatusRow::toTestStatus).asJava();
+
+        assertEquals(2, testStatusesByTestCase.size());
+
     }
 
 
