@@ -21,9 +21,8 @@ repositories {
 
 dependencies {
 
-    compile 'io.springfox:springfox-swagger2:2.9.2'
-    compile 'io.springfox:springfox-swagger-ui:2.9.2'
-
+    compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+    compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
     compile group: 'io.vavr', name: 'vavr-jackson', version: '0.10.2'
     compile group: 'io.vavr', name: 'vavr', version: '0.10.2'
 
