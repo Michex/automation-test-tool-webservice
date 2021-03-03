@@ -26,10 +26,6 @@ dependencies {
     compile group: 'io.vavr', name: 'vavr-jackson', version: '0.10.2'
     compile group: 'io.vavr', name: 'vavr', version: '0.10.2'
 
-    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.10.1'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.10.1'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.10.1'
-
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     runtimeOnly 'com.h2database:h2'
